@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:annotation-config />
+	<context:component-scan base-package="com.app" />
+	<context:property-placeholder />
+
+	<!-- <mvc:resources mapping="/resources/**" location="/resources/js/" /> -->
+	<!-- <mvc:resources mapping="/resources/**" location="file:/resources/files/"/> -->
+
+<!-- 	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" /> -->
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" />
+	<bean name="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsps/" />
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+
+	</bean>
+
+
+	<bean class="org.springframework.mail.javamail.JavaMailSenderImpl"
+		name="mailSender">
+		<property name="host">
+			<value>smtp.gmail.com</value>
+		</property>
+		<property name="port">
+			<value>587</value>
+		</property>
+		<property name="username">
+			<value>springbysuresh@gmail.com</value>
+		</property>
+		<property name="password">
+			<value>Spring99**</value>
+		</property>
+
+	</bean>
+
+	<bean name="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName">
+			<value>org.mariadb.jdbc.Driver</value>
+		</property>
+		<property name="url" value="jdbc:mysql://localhost:3306/test" />
+		<property name="username" value="spring" />
+		<property name="password" value="spring" />
+
+
+		<!-- <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/> 
+			<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/> <property 
+			name="username" value="spring"/> <property name="password" value="spring"/> -->
+	</bean>
+
+	<bean name="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MariaDBDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+
+		<property name="annotatedClasses">
+			<list>
+
+				<value>com.app.model.Employee</value>
+			</list>
+
+		</property>
+
+	</bean>
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="10000000"></property>
+	</bean>
+</beans>
